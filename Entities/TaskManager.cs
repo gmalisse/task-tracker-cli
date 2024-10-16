@@ -47,5 +47,20 @@ namespace TaskManagerCLI.Entities {
             SaveTasks();
             Console.WriteLine($"Task added succesfully (ID: {newId})");
         }
+
+        public void ListTasks() {
+            if (tasks.Count > 0) {
+                foreach (var task in tasks) {
+                    Console.WriteLine(task.Id + ". " + task.Description);
+                }
+            }
+            else {
+                Console.WriteLine("You don't have any tasks");
+            }           
+        }
+
+        public void DeleteTask(int Id) {
+            tasks.RemoveAt(Id);
+        }
     }
 }

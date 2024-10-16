@@ -23,7 +23,13 @@ namespace TaskManagerCLI
                     }
                     taskManager.AddTask(args[1]);
                     break;
-
+                case "list":
+                    taskManager.ListTasks();
+                    break;
+                case "delete":
+                    int delete = int.Parse(args[1]);
+                    taskManager.DeleteTask(delete);
+                    break;
                 default:
                     Console.WriteLine("Invalid command.");
                     break;
