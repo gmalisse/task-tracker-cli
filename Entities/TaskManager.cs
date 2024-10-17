@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System.Xml;
 
 namespace TaskManagerCLI.Entities {
     internal class TaskManager {
         private List<Task> tasks;
         private const string FilePath = "tasks.json";
+        int newId;
 
         public TaskManager() {
             tasks = LoadTasks();
@@ -32,7 +34,6 @@ namespace TaskManagerCLI.Entities {
         /* Creates a new instance of the Task class, with a description and a generated ID, then
          * adds it to the list and saves the alterations. */
         public void AddTask(string description) {
-            int newId;
             if (tasks.Count > 0) {
                 newId = tasks[^1].Id + 1;
             }
@@ -49,18 +50,29 @@ namespace TaskManagerCLI.Entities {
         }
 
         public void ListTasks() {
-            if (tasks.Count > 0) {
-                foreach (var task in tasks) {
-                    Console.WriteLine(task.Id + ". " + task.Description);
-                }
-            }
-            else {
-                Console.WriteLine("You don't have any tasks");
-            }           
+            foreach (var task in tasks) {
+                Console.WriteLine(task.Id + ". " + task.Description);
+            }          
         }
 
         public void DeleteTask(int Id) {
-            tasks.RemoveAt(Id);
+            int index = Id - 1;
+            string removed = tasks[index].Description;
+            tasks.RemoveAt(index);
+            foreach (var task in tasks) {
+                if (task.Id > index) {
+                    task.Id -= 1; 
+                }
+            }
+            Console.WriteLine($"{removed} was deleted");
+            SaveTasks();
+        }
+
+        public void UpdateTask(int Id, string desc) {
+            int index = Id - 1;
+            tasks[index].Description = desc;
+            Console.WriteLine($"Task {Id} was updated");
+            SaveTasks();
         }
     }
 }
