@@ -24,13 +24,22 @@ namespace TaskManagerCLI
                     taskManager.AddTask(args[1]);
                     break;
                 case "list":
-                    taskManager.ListTasks();
+                    if (args.Length < 2) {
+                        taskManager.ListTasks("all"); //listar outros tipos c base nos args
+                    }
+                    else {
+                        string mark = args[1].ToLower();
+                        taskManager.ListTasks(mark);
+                    }
                     break;
                 case "delete":                  
                     taskManager.DeleteTask(int.Parse(args[1]));
                     break;
                 case "update":
                     taskManager.UpdateTask(int.Parse(args[1]), args[2]);
+                    break;
+                case "mark":
+                    taskManager.UpdateStatus(int.Parse(args[2]), args[1]);
                     break;
                 default:
                     Console.WriteLine("Invalid command.");

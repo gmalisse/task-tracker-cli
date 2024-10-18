@@ -23,7 +23,7 @@ namespace TaskManagerCLI.Entities {
             string json = File.ReadAllText(FilePath);
             return JsonSerializer.Deserialize<List<Task>>(json) ?? new List<Task>();
         }
-        
+
         /* Converts the list in a string, then writes it on the json file, replacing the 
          * content. */
         public void SaveTasks() {
@@ -49,10 +49,33 @@ namespace TaskManagerCLI.Entities {
             Console.WriteLine($"Task added succesfully (ID: {newId})");
         }
 
-        public void ListTasks() {
-            foreach (var task in tasks) {
-                Console.WriteLine(task.Id + ". " + task.Description);
-            }          
+        public void ListTasks(string x) {
+            if (x == "all") { 
+                foreach (var task in tasks) {
+                    Console.WriteLine(task.Id + ". " + task.Description);
+                }
+            }
+            else if (x == "done") {
+                foreach (var task in tasks) {
+                    if (task.Status == "done"){
+                        Console.WriteLine(task.Id + ". " + task.Description);
+                    }
+                }
+            }
+            else if (x == "todo") {
+                foreach (var task in tasks) {
+                    if (task.Status == "todo") {
+                        Console.WriteLine(task.Id + ". " + task.Description);
+                    }
+                }
+            }
+            else if (x == "in-progress") {
+                foreach (var task in tasks) {
+                    if (task.Status == "in-progress") {
+                        Console.WriteLine(task.Id + ". " + task.Description);
+                    }
+                }
+            }
         }
 
         public void DeleteTask(int Id) {
@@ -61,7 +84,7 @@ namespace TaskManagerCLI.Entities {
             tasks.RemoveAt(index);
             foreach (var task in tasks) {
                 if (task.Id > index) {
-                    task.Id -= 1; 
+                    task.Id -= 1;
                 }
             }
             Console.WriteLine($"{removed} was deleted");
@@ -73,6 +96,19 @@ namespace TaskManagerCLI.Entities {
             tasks[index].Description = desc;
             Console.WriteLine($"Task {Id} was updated");
             SaveTasks();
+        }
+
+        public void UpdateStatus(int Id, string status) {
+            int index = Id - 1;
+            status = status.ToLower();
+            if (status == "done" || status == "todo" || status == "in-progress") {
+                tasks[index].Status = status;
+                tasks[index].UpdatedAt = DateTime.Now;
+                SaveTasks();
+            }
+            else {
+                Console.WriteLine("This is not a valid status");
+            }           
         }
     }
 }
