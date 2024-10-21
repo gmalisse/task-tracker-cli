@@ -14,7 +14,10 @@ cd backend-projects/task-manager-cli
 Then, run the commands below. All your tasks is going to be saved in a JSON file.
 
 ### Adding a new task
-`dotnet run add "Buy groceries"`
+
+```bash
+dotnet run add "Buy groceries"
+```
 
 
 ### Updating and deleting tasks
